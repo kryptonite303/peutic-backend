@@ -5,5 +5,10 @@ module.exports = mongoose.model('User',{
     password: String,
     email: String,
     gender: String,
-    address: String
+    address: String,
+    firstName: String,
+    middleName: String,
+    lastName: String,
+    bio: String,
+    birthday: Date
 });

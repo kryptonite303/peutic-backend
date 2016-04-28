@@ -44,11 +44,23 @@ module.exports = function(passport){
 	});
 
 	/* Handle Registration POST */
-	router.post('/signup', passport.authenticate('signup', {
-		successRedirect: '/home',
-		failureRedirect: '/signup',
-		failureFlash : true  
-	}));
+	router.post('/signup', function (req, res) {
+		// Adds user to db and authenticates user
+		passport.authenticate('signup', function (err, user, info) {
+			if (err) { 
+				return res.send({ success : false, message : err }); 
+			}
+			if (!user) { 
+				return res.send({ success : false, message : 'user not found' }); 
+			}
+			req.logIn(user, function(err) {
+				if (err) { 
+					return res.send({ success : false, message : err }); 
+				}
+				return res.send({ success : true, message : 'authenticated' });
+			});
+		})(req, res);
+	});
 
 	/* GET Home Page */
 	router.get('/home', isAuthenticated, function(req, res){
@@ -57,6 +69,7 @@ module.exports = function(passport){
 	});
 
 	/* Handle Logout */
+	// Must be logged in to logout
 	router.get('/logout', isAuthenticated, function(req, res) {
 		req.logout();
 		return res.send({ success : true, message : 'logged out' });

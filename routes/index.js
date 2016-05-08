@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var Profile = require('../models/profile');
+var profile = new Profile();
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -60,6 +62,15 @@ module.exports = function(passport){
 				return res.send({ success : true, message : 'authenticated' });
 			});
 		})(req, res);
+	});
+
+	router.post('/profile', isAuthenticated, function (req, res) {
+		profile.getProfile(req.body, function (err, result) {
+			if (err) {
+				return res.send({success : false, message : err});
+			}
+			return res.send({success : true, message : result});
+		})
 	});
 
 	/* GET Home Page */

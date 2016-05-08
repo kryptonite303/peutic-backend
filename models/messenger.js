@@ -1,7 +1,7 @@
 var mongo = require('mongoskin');
 var config = require('../config');
 var db = mongo.db(config.mongodb.simpli, config.mongodb.settings);
-db.bind('users');
+db.bind('messeges');
 
 function Profile() {
     this.getProfile = function (params, callback) {
@@ -24,7 +24,6 @@ function Profile() {
             return callback(null, _id);
         })
     }
-
 }
 module.exports = function () {
     return new Profile();

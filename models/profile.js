@@ -13,6 +13,17 @@ function Profile() {
             return callback(null, items[0]);
         });
     }
+
+    this.updateProfile = function (params, callback) {
+        var _id = params._id;
+        var update = params.update;
+        db.users.update({username: _id}, update, (err) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, _id);
+        })
+    }
 }
 module.exports = function () {
     return new Profile();
